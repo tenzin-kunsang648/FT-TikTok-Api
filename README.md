@@ -217,9 +217,8 @@ This project is built using the [TikTok-Api](https://github.com/davidteather/Tik
 
 ## Documentation
 
-- [MULTI_COHORT_GUIDE.md](FT/documentation/MULTI_COHORT_GUIDE.md) - Managing multiple batches simultaneously
-- [IMPLEMENTATION_COMPARISON.md](FT/documentation/IMPLEMENTATION_COMPARISON.md) - Complete comparison of requirements vs. implementation
-
+- [Managing multiple batches simultaneously](FT/documentation/MULTI_COHORT_GUIDE.md) 
+- [Complete comparison of requirements vs. implementation](FT/documentation/IMPLEMENTATION_COMPARISON.md) 
 ---
 
 ## License
