@@ -124,7 +124,7 @@ python3 tiktok_tracker.py collect 20251214_120000
 python3 tiktok_tracker.py export 20251207_120000
 ```
 
-See `FT/documentation/MULTI_COHORT_GUIDE.md` for detailed examples.
+See [MULTI_COHORT_GUIDE.md](FT/documentation/MULTI_COHORT_GUIDE.md) for detailed examples.
 
 ---
 
@@ -205,7 +205,7 @@ Laptop can be turned off between collections.
 - completion_rate, watch_time (requires TikTok Analytics - creator access only)
 - traffic_source, FYP appearances (internal TikTok metrics)
 
-See `FT/documentation/IMPLEMENTATION_COMPARISON.md` for complete field analysis.
+See [IMPLEMENTATION_COMPARISON.md](FT/documentation/IMPLEMENTATION_COMPARISON.md) for complete field analysis.
 
 ---
 
@@ -217,8 +217,8 @@ This project is built using the [TikTok-Api](https://github.com/davidteather/Tik
 
 ## Documentation
 
-- **`FT/documentation/MULTI_COHORT_GUIDE.md`** - Managing multiple batches simultaneously
-- **`FT/documentation/IMPLEMENTATION_COMPARISON.md`** - Complete comparison of requirements vs. implementation
+- [MULTI_COHORT_GUIDE.md](FT/documentation/MULTI_COHORT_GUIDE.md) - Managing multiple batches simultaneously
+- [IMPLEMENTATION_COMPARISON.md](FT/documentation/IMPLEMENTATION_COMPARISON.md) - Complete comparison of requirements vs. implementation
 
 ---
 
