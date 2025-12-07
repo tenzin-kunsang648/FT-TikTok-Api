@@ -186,16 +186,21 @@ def extract_data(raw):
         'video_url': f"https://www.tiktok.com/@{author.get('uniqueId', 'unknown')}/video/{raw.get('id')}",
         'upload_timestamp': safe_int(upload_ts),
         'upload_datetime': upload_dt,
-        'hours_since_upload': round(hours_since, 2) if hours_since else None,
-        'collection_timestamp': datetime.now().isoformat(),
         'caption': str(raw.get('desc', '')),
         'hashtags': ', '.join([c.get('title', '') for c in raw.get('challenges', [])]),
         'video_duration': safe_int(video.get('duration')),
+        'video_width': safe_int(video.get('width')),
+        'video_height': safe_int(video.get('height')),
+        'video_ratio': str(video.get('ratio', '')),
         'thumbnail_url': str(video.get('cover', '')),
+        'thumbnail_dynamic': str(video.get('dynamicCover', '')),
         'music_id': str(music.get('id', '')),
         'sound_title': str(music.get('title', '')),
         'sound_author': str(music.get('authorName', '')),
         'sound_original': bool(music.get('original', False)),
+        'sound_duration': safe_int(music.get('duration')),
+        'collection_timestamp': datetime.now().isoformat(),
+        'hours_since_upload': round(hours_since, 2) if hours_since else None,
         'views': views,
         'likes': likes,
         'comments_count': comments,
@@ -207,11 +212,17 @@ def extract_data(raw):
         'creator_username': str(author.get('uniqueId', '')),
         'creator_display_name': str(author.get('nickname', '')),
         'creator_verified': bool(author.get('verified', False)),
-        'creator_follower_count': safe_int(author_stats.get('followerCount')),
-        'creator_following_count': safe_int(author_stats.get('followingCount')),
-        'creator_total_likes': safe_int(author_stats.get('heartCount')),
-        'creator_total_videos': safe_int(author_stats.get('videoCount')),
         'creator_bio': str(author.get('signature', '')),
+        'creator_follower_count': safe_int(author_stats_v2.get('followerCount', author_stats.get('followerCount'))),
+        'creator_following_count': safe_int(author_stats_v2.get('followingCount', author_stats.get('followingCount'))),
+        'creator_total_likes': safe_int(author_stats_v2.get('heartCount', author_stats.get('heartCount'))),
+        'creator_total_videos': safe_int(author_stats_v2.get('videoCount', author_stats.get('videoCount'))),
+        'is_ad': bool(raw.get('isAd', False)),
+        'duet_enabled': bool(author.get('duetSetting', 0) == 0),
+        'stitch_enabled': bool(author.get('stitchSetting', 0) == 0),
+        'private_account': bool(author.get('privateAccount', False)),
+        'diversification_id': str(raw.get('diversificationId', '')),
+        'category_type': safe_int(raw.get('CategoryType')),
     }
 
 
@@ -308,8 +319,14 @@ async def init_cohort(count=100):
 # COLLECT
 # =============================================================================
 
-async def collect_timepoint(cohort_id=None):
-    """Re-fetch tracked videos at next timepoint"""
+async def collect_timepoint(cohort_id=None, collect_comments=False):
+    """
+    Re-fetch tracked videos at next timepoint.
+    
+    Args:
+        cohort_id: Specific cohort or None for active
+        collect_comments: If True, collect top 50 comments (only at hour_48)
+    """
     api = None
     
     try:
@@ -337,11 +354,7 @@ async def collect_timepoint(cohort_id=None):
         data = []
         for i, vid in enumerate(video_ids, 1):
             try:
-                # Fetch using video ID - need to get data from trending first
-                # Then re-fetch with full info
-                video = api.video(id=vid)
-                
-                # Use make_request to get video data by ID
+                # Fetch video data
                 params = {'itemId': vid}
                 raw = await api.make_request(
                     url='https://www.tiktok.com/api/item/detail/',
@@ -350,8 +363,28 @@ async def collect_timepoint(cohort_id=None):
                 
                 if raw and raw.get('itemInfo'):
                     video_data = extract_data(raw['itemInfo']['itemStruct'])
+                    
+                    # Collect comment stats at hour_48
+                    if next_tp == 'hour_48' or collect_comments:
+                        print(f"  [{i}/{len(video_ids)}] {vid}: {video_data['views']:,} views")
+                        print(f"      ⏳ Waiting 5s before comments...")
+                        
+                        # Long delay before comments to reset bot detection
+                        await asyncio.sleep(5)
+                        
+                        comment_stats = await collect_comments_for_video(api, vid)
+                        video_data.update(comment_stats)
+                        
+                        if comment_stats['comments_sampled'] > 0:
+                            print(f"      ✓ Collected stats from {comment_stats['comments_sampled']} comments")
+                    else:
+                        print(f"  [{i}/{len(video_ids)}] {vid}: {video_data['views']:,} views")
+                        video_data['top_comment_text'] = None
+                        video_data['top_comment_likes'] = 0
+                        video_data['avg_comment_likes'] = 0
+                        video_data['comments_sampled'] = 0
+                    
                     data.append(video_data)
-                    print(f"  [{i}/{len(video_ids)}] {vid}: {video_data['views']:,} views")
                 else:
                     print(f"  ✗ {vid}: No data returned")
                 
@@ -371,6 +404,61 @@ async def collect_timepoint(cohort_id=None):
         if api:
             await api.close_sessions()
             await api.stop_playwright()
+
+
+async def collect_comments_for_video(api, video_id):
+    """
+    Collect comment statistics with delays to avoid bot detection.
+    
+    Collects top 20 comments slowly to calculate:
+    - Top comment and its likes
+    - Average likes per comment
+    
+    Args:
+        api: TikTokApi instance
+        video_id: Video ID
+    
+    Returns:
+        Dict with comment statistics
+    """
+    stats = {
+        'top_comment_text': None,
+        'top_comment_likes': 0,
+        'avg_comment_likes': 0,
+        'comments_sampled': 0
+    }
+    
+    try:
+        video = api.video(id=video_id)
+        
+        comments = []
+        collected = 0
+        
+        async for comment in video.comments(count=20):
+            comments.append({
+                'text': comment.text,
+                'likes': comment.likes_count
+            })
+            collected += 1
+            
+            # Add delay between each comment
+            await asyncio.sleep(1)
+            
+            if collected >= 20:
+                break
+        
+        if comments:
+            top = max(comments, key=lambda x: x['likes'])
+            stats['top_comment_text'] = top['text'][:100]
+            stats['top_comment_likes'] = top['likes']
+            stats['avg_comment_likes'] = round(sum(c['likes'] for c in comments) / len(comments), 2)
+            stats['comments_sampled'] = len(comments)
+        
+    except Exception as e:
+        # Silently fail - comments not critical
+        pass
+    
+    return stats
 
 
 # =============================================================================
@@ -443,31 +531,18 @@ def export_dataset(cohort_id=None):
     out = manager.cohort_dir / 'final_dataset.csv'
     
     headers = [
-        # Identifiers
         'cohort_id', 'video_id', 'timepoint', 'video_url',
-        
-        # Timing
         'upload_timestamp', 'upload_datetime', 'collection_timestamp', 'hours_since_upload',
-        
-        # Content
-        'caption', 'hashtags', 'video_duration', 'thumbnail_url',
-        
-        # Music/Sound
-        'music_id', 'sound_title', 'sound_author', 'sound_original',
-        
-        # Engagement (raw)
+        'caption', 'hashtags', 'video_duration', 'video_width', 'video_height', 'video_ratio',
+        'thumbnail_url', 'thumbnail_dynamic',
+        'music_id', 'sound_title', 'sound_author', 'sound_original', 'sound_duration',
         'views', 'likes', 'comments_count', 'shares', 'saves',
-        
-        # Engagement (calculated)
         'engagement_rate', 'comment_rate', 'share_rate',
-        
-        # Velocity (change over time)
         'views_velocity', 'likes_velocity', 'views_growth_pct',
-        
-        # Creator
-        'creator_username', 'creator_display_name', 'creator_verified',
-        'creator_follower_count', 'creator_following_count',
-        'creator_total_likes', 'creator_total_videos', 'creator_bio'
+        'creator_username', 'creator_display_name', 'creator_verified', 'creator_bio',
+        'creator_follower_count', 'creator_following_count', 'creator_total_likes', 'creator_total_videos',
+        'is_ad', 'duet_enabled', 'stitch_enabled', 'private_account',
+        'diversification_id', 'category_type'
     ]
     
     with open(out, 'w', newline='', encoding='utf-8') as f:
@@ -562,7 +637,9 @@ async def main():
     if cmd == 'init':
         await init_cohort(int(sys.argv[2]) if len(sys.argv) > 2 else 100)
     elif cmd == 'collect':
-        await collect_timepoint(sys.argv[2] if len(sys.argv) > 2 else None)
+        cohort_id = sys.argv[2] if len(sys.argv) > 2 and not sys.argv[2].startswith('--') else None
+        collect_comments = '--with-comments' in sys.argv
+        await collect_timepoint(cohort_id, collect_comments)
     elif cmd == 'export':
         export_dataset(sys.argv[2] if len(sys.argv) > 2 else None)
     elif cmd == 'status':

@@ -143,15 +143,16 @@ cohort_id,video_id,timepoint,views,likes,engagement_rate,views_velocity,...
 
 **50 videos × 5 timepoints = 250 rows**
 
-**Columns (37):**
+**Columns (48):**
 - Identifiers: cohort_id, video_id, timepoint, video_url
-- Timing: upload_datetime, collection_timestamp, hours_since_upload
+- Timing: upload_timestamp, upload_datetime, collection_timestamp, hours_since_upload
+- Video: caption, hashtags, video_duration, video_width, video_height, video_ratio, thumbnail_url, thumbnail_dynamic
+- Music: music_id, sound_title, sound_author, sound_original, sound_duration
 - Engagement (raw): views, likes, comments_count, shares, saves
 - Engagement (calculated): engagement_rate, comment_rate, share_rate
 - Velocity: views_velocity, likes_velocity, views_growth_pct
-- Content: caption, hashtags, video_duration, thumbnail_url
-- Music: music_id, sound_title, sound_author, sound_original
-- Creator: username, display_name, follower_count, verified, bio
+- Creator: username, display_name, verified, bio, follower_count, following_count, total_likes, total_videos
+- Flags: is_ad, duet_enabled, stitch_enabled, private_account, diversification_id, category_type
 
 ---
 
@@ -192,11 +193,12 @@ Laptop can be turned off between collections.
 
 ## Data Coverage
 
-**Available (37 fields collected):**
-- All video metadata
+**Available (48 fields collected):**
+- All video metadata (including dimensions, ratio)
 - All engagement metrics  
 - All creator information
 - Calculated rates and velocities
+- Video flags (ad status, duet/stitch settings)
 
 **Not Available:**
 - duet_count, stitch_count (not in TikTok public API)
