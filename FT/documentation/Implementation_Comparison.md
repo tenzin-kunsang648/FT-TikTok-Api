@@ -2,7 +2,7 @@
 
 **Date:** December 7, 2025  
 **Original Plan:** Data Collection Instructions PDF  
-**Current Implementation:** tiktok_tracker.py  
+**Current Implementation:** tiktok_tracker.py   
 
 ---
 
