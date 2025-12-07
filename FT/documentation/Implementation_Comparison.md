@@ -672,4 +672,4 @@ y = df[df['timepoint'] == 'hour_24']['views']
 
 Built a robust time-series tracking system that collects 91% of requested fields and successfully tracks videos over 48 hours. The main adaptation was accepting that trending videos aren't freshly uploaded, but the system still provides valuable growth trajectory data for ML model development.
 
-**Status:** Production-ready with documented limitations ✅
+**Status:** Production-ready with documented limitations 
