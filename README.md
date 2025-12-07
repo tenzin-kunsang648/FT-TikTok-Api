@@ -143,7 +143,7 @@ cohort_id,video_id,timepoint,views,likes,engagement_rate,views_velocity,...
 
 **50 videos × 5 timepoints = 250 rows**
 
-**Columns (40):**
+**Columns (37):**
 - Identifiers: cohort_id, video_id, timepoint, video_url
 - Timing: upload_datetime, collection_timestamp, hours_since_upload
 - Engagement (raw): views, likes, comments_count, shares, saves
@@ -152,7 +152,6 @@ cohort_id,video_id,timepoint,views,likes,engagement_rate,views_velocity,...
 - Content: caption, hashtags, video_duration, thumbnail_url
 - Music: music_id, sound_title, sound_author, sound_original
 - Creator: username, display_name, follower_count, verified, bio
-- Comment stats: top_comment_text, top_comment_likes, avg_comment_likes
 
 ---
 
@@ -193,12 +192,11 @@ Laptop can be turned off between collections.
 
 ## Data Coverage
 
-**Available (40 fields collected):**
+**Available (37 fields collected):**
 - All video metadata
 - All engagement metrics  
 - All creator information
 - Calculated rates and velocities
-- Comment statistics (top comment, averages)
 
 **Not Available:**
 - duet_count, stitch_count (not in TikTok public API)
