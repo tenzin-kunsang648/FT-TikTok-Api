@@ -193,19 +193,19 @@ Laptop can be turned off between collections.
 
 ## Data Coverage
 
-### ✅ Available (40 fields collected):
+**Available (40 fields collected):**
 - All video metadata
 - All engagement metrics  
 - All creator information
 - Calculated rates and velocities
 - Comment statistics (top comment, averages)
 
-### ❌ Not Available:
+**Not Available:**
 - duet_count, stitch_count (not in TikTok public API)
 - completion_rate, watch_time (requires TikTok Analytics - creator access only)
 - traffic_source, FYP appearances (internal TikTok metrics)
 
-See [IMPLEMENTATION_COMPARISON.md](FT/documentation/Implementation_Comparison.md) for complete field analysis.
+See [Implementation_Comparison.md](FT/documentation/Implementation_Comparison.md) for complete field analysis.
 
 ---
 
@@ -219,6 +219,7 @@ This project is built using the [TikTok-Api](https://github.com/davidteather/Tik
 
 - [Managing multiple batches simultaneously](FT/documentation/MULTI_COHORT_GUIDE.md) 
 - [Complete comparison of requirements vs. implementation](FT/documentation/Implementation_Comparison.md) 
+
 ---
 
 ## License

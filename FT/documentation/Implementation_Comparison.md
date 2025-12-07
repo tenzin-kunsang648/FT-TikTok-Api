@@ -8,29 +8,29 @@
 
 ## Executive Summary
 
-### Overall Status: ✅ 85% Complete
+### Overall Status: [YES] 85% Complete
 
-- ✅ **Time-series tracking:** Fully implemented
-- ✅ **Core data fields:** 32/35 available (91%)
-- ⚠️ **Video freshness:** Adapted approach (see details)
-- ✅ **Automation:** Manual workflow implemented
-- ✅ **Data quality:** All checks implemented
+- [YES] **Time-series tracking:** Fully implemented
+- [YES] **Core data fields:** 32/35 available (91%)
+- [PARTIAL] **Video freshness:** Adapted approach (see details)
+- [YES] **Automation:** Manual workflow implemented
+- [YES] **Data quality:** All checks implemented
 
 ---
 
-## 1. Time-Series Data Collection ✅ COMPLETE
+## 1. Time-Series Data Collection [YES] COMPLETE
 
 ### Original Requirement:
 > Track SAME videos at: Hour 1, Hour 6, Hour 24, Hour 48 after upload
 
-### Implementation Status: ✅ FULLY IMPLEMENTED
+### Implementation Status: [YES] FULLY IMPLEMENTED
 
 **What we built:**
-- ✅ Cohort system tracks specific video IDs
-- ✅ Re-fetches SAME videos at each timepoint
-- ✅ Saves snapshots: hour_0, hour_1, hour_6, hour_24, hour_48
-- ✅ Calculates velocity metrics automatically
-- ✅ Exports time-series CSV format
+- [YES] Cohort system tracks specific video IDs
+- [YES] Re-fetches SAME videos at each timepoint
+- [YES] Saves snapshots: hour_0, hour_1, hour_6, hour_24, hour_48
+- [YES] Calculates velocity metrics automatically
+- [YES] Exports time-series CSV format
 
 **Caveat:**
 - Timepoints measured from **first collection** (hour_0), not video upload
@@ -55,18 +55,18 @@ python3 tiktok_tracker.py export     # Generate CSV
 > Mix of genres  
 > 100-200 videos tracked over 48 hours  
 
-### Implementation Status: ⚠️ PARTIALLY ADAPTED
+### Implementation Status: [PARTIAL] PARTIALLY ADAPTED
 
 **What works:**
-- ✅ Collects from trending/FYP
-- ✅ Gets mix of performance levels (naturally occurs in trending)
-- ✅ Configurable count (default: 100 videos)
-- ✅ Tracks over 48 hours
+- [YES] Collects from trending/FYP
+- [YES] Gets mix of performance levels (naturally occurs in trending)
+- [YES] Configurable count (default: 100 videos)
+- [YES] Tracks over 48 hours
 
 **What was adapted:**
-- ⚠️ **Video freshness:** Trending API returns videos 40-1700 hours old
-- ⚠️ **Solution:** Collect 200+ videos, sort by upload time, select 100 newest
-- ⚠️ **Result:** Videos still may be days old, but tracking newest available
+- [PARTIAL] **Video freshness:** Trending API returns videos 40-1700 hours old
+- [PARTIAL] **Solution:** Collect 200+ videos, sort by upload time, select 100 newest
+- [PARTIAL] **Result:** Videos still may be days old, but tracking newest available
 
 **Why this happened:**
 - TikTok's public API has NO endpoint for "videos uploaded in last 6 hours"
@@ -74,10 +74,10 @@ python3 tiktok_tracker.py export     # Generate CSV
 - Hashtag/creator monitoring finds some fresher content but not consistently
 
 **Workarounds attempted:**
-1. ❌ Filter trending by view count (< 15K) - too few results
-2. ❌ Monitor popular creators - posting frequency too low
-3. ❌ Track trending hashtags - still returns older popular videos
-4. ✅ **Current:** Sort by upload timestamp, select newest from trending
+1. [NO] Filter trending by view count (< 15K) - too few results
+2. [NO] Monitor popular creators - posting frequency too low
+3. [NO] Track trending hashtags - still returns older popular videos
+4. [YES] **Current:** Sort by upload timestamp, select newest from trending
 
 **Impact on ML model:**
 - Still captures growth trajectories and velocity metrics
@@ -88,19 +88,19 @@ python3 tiktok_tracker.py export     # Generate CSV
 
 ## 3. Required Data Fields
 
-### A. Video Metadata ✅ 9/9 AVAILABLE (100%)
+### A. Video Metadata [YES] 9/9 AVAILABLE (100%)
 
 | Field | Status | Implementation |
 |-------|--------|----------------|
-| video_id | ✅ | `video.id` |
-| video_url | ✅ | Constructed from username + id |
-| upload_timestamp | ✅ | `video.createTime` (Unix timestamp) |
-| caption | ✅ | `video.desc` |
-| hashtags | ✅ | `video.challenges` array |
-| video_duration | ✅ | `video.video.duration` |
-| thumbnail_url | ✅ | `video.video.cover` |
-| music_id | ✅ | `video.music.id` |
-| sound_title | ✅ | `video.music.title` |
+| video_id | [YES] | `video.id` |
+| video_url | [YES] | Constructed from username + id |
+| upload_timestamp | [YES] | `video.createTime` (Unix timestamp) |
+| caption | [YES] | `video.desc` |
+| hashtags | [YES] | `video.challenges` array |
+| video_duration | [YES] | `video.video.duration` |
+| thumbnail_url | [YES] | `video.video.cover` |
+| music_id | [YES] | `video.music.id` |
+| sound_title | [YES] | `video.music.title` |
 
 **Additional fields collected:**
 - upload_datetime (ISO format conversion of timestamp)
@@ -108,55 +108,55 @@ python3 tiktok_tracker.py export     # Generate CSV
 
 ---
 
-### B. Engagement Metrics ✅ 7/9 AVAILABLE (78%)
+### B. Engagement Metrics [YES] 7/9 AVAILABLE (78%)
 
 **Collected at ALL timepoints (hour_0, hour_1, hour_6, hour_24, hour_48):**
 
 | Field | Status | Source |
 |-------|--------|--------|
-| collection_timestamp | ✅ | Generated when collecting |
-| hours_since_upload | ✅ | Calculated from createTime |
-| views | ✅ | `stats.playCount` |
-| likes | ✅ | `stats.diggCount` |
-| comments_count | ✅ | `stats.commentCount` |
-| shares | ✅ | `stats.shareCount` |
-| saves | ⚠️ | `stats.collectCount` (often null) |
-| duet_count | ❌ | Not in public API |
-| stitch_count | ❌ | Not in public API |
+| collection_timestamp | [YES] | Generated when collecting |
+| hours_since_upload | [YES] | Calculated from createTime |
+| views | [YES] | `stats.playCount` |
+| likes | [YES] | `stats.diggCount` |
+| comments_count | [YES] | `stats.commentCount` |
+| shares | [YES] | `stats.shareCount` |
+| saves | [PARTIAL] | `stats.collectCount` (often null) |
+| duet_count | [NO] | Not in public API |
+| stitch_count | [NO] | Not in public API |
 
 **Additional calculated metrics:**
-- ✅ engagement_rate = (likes / views) × 100
-- ✅ comment_rate = (comments / views) × 1000
-- ✅ share_rate = (shares / views) × 1000
+- [YES] engagement_rate = (likes / views) × 100
+- [YES] comment_rate = (comments / views) × 1000
+- [YES] share_rate = (shares / views) × 1000
 
 **Velocity metrics (between timepoints):**
-- ✅ views_velocity = Δviews / Δhours
-- ✅ likes_velocity = Δlikes / Δhours
-- ✅ views_growth_pct = % change in views
+- [YES] views_velocity = Δviews / Δhours
+- [YES] likes_velocity = Δlikes / Δhours
+- [YES] views_growth_pct = % change in views
 
 ---
 
-### C. Creator Information ✅ 8/8 AVAILABLE (100%)
+### C. Creator Information [YES] 8/8 AVAILABLE (100%)
 
 | Field | Status | Source |
 |-------|--------|--------|
-| creator_username | ✅ | `author.uniqueId` |
-| creator_display_name | ✅ | `author.nickname` |
-| creator_follower_count | ✅ | `authorStats.followerCount` |
-| creator_following_count | ✅ | `authorStats.followingCount` |
-| creator_total_likes | ✅ | `authorStats.heartCount` |
-| creator_total_videos | ✅ | `authorStats.videoCount` |
-| creator_verified | ✅ | `author.verified` |
-| creator_bio | ✅ | `author.signature` |
+| creator_username | [YES] | `author.uniqueId` |
+| creator_display_name | [YES] | `author.nickname` |
+| creator_follower_count | [YES] | `authorStats.followerCount` |
+| creator_following_count | [YES] | `authorStats.followingCount` |
+| creator_total_likes | [YES] | `authorStats.heartCount` |
+| creator_total_videos | [YES] | `authorStats.videoCount` |
+| creator_verified | [YES] | `author.verified` |
+| creator_bio | [YES] | `author.signature` |
 
 ---
 
-### D. Comments Data ❌ NOT IMPLEMENTED
+### D. Comments Data [NO] NOT IMPLEMENTED
 
 **Original requirement:**
 > Collect top 20-50 comments at 48h timepoint
 
-**Status:** ❌ Not implemented in current version
+**Status:** [NO] Not implemented in current version
 
 **Why:**
 - Prioritized core time-series tracking
@@ -176,21 +176,21 @@ async for comment in video.comments(count=50):
 
 ---
 
-### E. Platform-Specific Features ❌ 0/11 AVAILABLE (0%)
+### E. Platform-Specific Features [NO] 0/11 AVAILABLE (0%)
 
 | Field | Status | Reason |
 |-------|--------|--------|
-| for_you_page_appearances | ❌ | Internal TikTok metric |
-| sound_trending | ❌ | No API flag (must infer) |
-| completion_rate | ❌ | Requires Analytics API |
-| average_watch_time | ❌ | Requires Analytics API |
-| replay_count | ❌ | Requires Analytics API |
-| audience_retention_curve | ❌ | Requires Analytics API |
-| video_transcript | ❌ | Requires transcription service |
-| share_destination | ❌ | Requires Analytics API |
-| traffic_source | ❌ | Requires Analytics API |
-| sound_trending | ❌ | No boolean flag |
-| sound_usage_count | ❌ | Not provided |
+| for_you_page_appearances | [NO] | Internal TikTok metric |
+| sound_trending | [NO] | No API flag (must infer) |
+| completion_rate | [NO] | Requires Analytics API |
+| average_watch_time | [NO] | Requires Analytics API |
+| replay_count | [NO] | Requires Analytics API |
+| audience_retention_curve | [NO] | Requires Analytics API |
+| video_transcript | [NO] | Requires transcription service |
+| share_destination | [NO] | Requires Analytics API |
+| traffic_source | [NO] | Requires Analytics API |
+| sound_trending | [NO] | No boolean flag |
+| sound_usage_count | [NO] | Not provided |
 
 **Why unavailable:**
 - These require TikTok Analytics API (creator-only access)
@@ -209,7 +209,7 @@ async for comment in video.comments(count=50):
 > Option 1: Time-Series Format (Preferred)  
 > Each row = one video at one timepoint
 
-### Implementation: ✅ EXACTLY AS SPECIFIED
+### Implementation: [YES] EXACTLY AS SPECIFIED
 
 **Output format:**
 ```csv
@@ -234,13 +234,13 @@ Also saves individual JSON snapshots for re-parsing if needed.
 > 2. Scheduled collection at 1h, 6h, 24h, 48h  
 > 3. Save to CSV with timestamp  
 
-### Implementation: ✅ COMPLETE (Manual Schedule)
+### Implementation: [YES] COMPLETE (Manual Schedule)
 
 **What's implemented:**
-- ✅ Initial scrape with configurable count
-- ✅ Manual scheduling (set reminders for each timepoint)
-- ✅ Saves JSON snapshots at each timepoint
-- ✅ Exports final CSV with all timepoints
+- [YES] Initial scrape with configurable count
+- [YES] Manual scheduling (set reminders for each timepoint)
+- [YES] Saves JSON snapshots at each timepoint
+- [YES] Exports final CSV with all timepoints
 
 **Automation:**
 - Manual workflow (5 commands over 48 hours)
@@ -248,9 +248,9 @@ Also saves individual JSON snapshots for re-parsing if needed.
 - Chose manual for flexibility (can turn off laptop between runs)
 
 **Storage:**
-- ✅ JSON backups of all raw responses
-- ✅ CSV export in time-series format
-- ✅ Cohort-based organization (multiple batches isolated)
+- [YES] JSON backups of all raw responses
+- [YES] CSV export in time-series format
+- [YES] Cohort-based organization (multiple batches isolated)
 
 ---
 
@@ -262,13 +262,13 @@ Also saves individual JSON snapshots for re-parsing if needed.
 > - Check views are monotonically increasing  
 > - Flag missing data  
 
-### Implementation: ✅ ALL CHECKS INCLUDED
+### Implementation: [YES] ALL CHECKS INCLUDED
 
 **Implemented:**
-- ✅ upload_timestamp from TikTok's createTime (reliable)
-- ✅ hours_since_upload calculated: (collection_time - upload_time) / 3600
-- ✅ Can verify views increase by comparing timepoints in CSV
-- ✅ Missing fields handled with safe_int() and defaults
+- [YES] upload_timestamp from TikTok's createTime (reliable)
+- [YES] hours_since_upload calculated: (collection_time - upload_time) / 3600
+- [YES] Can verify views increase by comparing timepoints in CSV
+- [YES] Missing fields handled with safe_int() and defaults
 
 **Additional quality measures:**
 - Safe type conversions prevent crashes
@@ -283,10 +283,10 @@ Also saves individual JSON snapshots for re-parsing if needed.
 
 | Deliverable | Status | Location |
 |-------------|--------|----------|
-| Sample dataset (20-30 videos over 48h) | ✅ | Can collect any size, tested with 2-100 |
-| Data dictionary | ✅ | API_COVERAGE_ANALYSIS.md (54KB) |
-| Collection script | ✅ | tiktok_tracker.py (one file, complete) |
-| Coverage report | ✅ | This document + earlier analysis |
+| Sample dataset (20-30 videos over 48h) | [YES] | Can collect any size, tested with 2-100 |
+| Data dictionary | [YES] | API_COVERAGE_ANALYSIS.md (54KB) |
+| Collection script | [YES] | tiktok_tracker.py (one file, complete) |
+| Coverage report | [YES] | This document + earlier analysis |
 
 ---
 
@@ -294,7 +294,7 @@ Also saves individual JSON snapshots for re-parsing if needed.
 
 ### 1. Can upload_timestamp be accessed reliably?
 
-**Answer:** ✅ YES
+**Answer:** [YES] YES
 - Available via `video.createTime` field
 - Unix timestamp, easily convertible to ISO format
 - Present in 100% of videos tested
@@ -304,7 +304,7 @@ Also saves individual JSON snapshots for re-parsing if needed.
 
 ### 2. Are duet_count and stitch_count visible?
 
-**Answer:** ❌ NO
+**Answer:** [NO] NO
 
 **Investigation:**
 - Checked video.stats object - not present
@@ -320,7 +320,7 @@ Also saves individual JSON snapshots for re-parsing if needed.
 
 ### 3. Can sound trending status be identified?
 
-**Answer:** ❌ NO DIRECT FLAG
+**Answer:** [NO] NO DIRECT FLAG
 
 **Investigation:**
 - No boolean "trending" field in music object
@@ -336,7 +336,7 @@ Also saves individual JSON snapshots for re-parsing if needed.
 
 ### 4. Rate limits and blocking?
 
-**Answer:** ✅ DOCUMENTED
+**Answer:** [YES] DOCUMENTED
 
 **Findings:**
 - ~100-200 requests per session before potential issues
@@ -354,7 +354,7 @@ Also saves individual JSON snapshots for re-parsing if needed.
 
 ## Current System Capabilities
 
-### ✅ What It Does Well
+### [YES] What It Does Well
 
 1. **Time-Series Tracking**
    - Tracks exact same videos over 48 hours
@@ -378,7 +378,7 @@ Also saves individual JSON snapshots for re-parsing if needed.
 
 ---
 
-### ⚠️ Limitations & Adaptations
+### [PARTIAL] Limitations & Adaptations
 
 1. **Video Freshness**
    - **Original goal:** Videos < 6 hours old
@@ -400,19 +400,19 @@ Also saves individual JSON snapshots for re-parsing if needed.
 
 ## Field-by-Field Comparison
 
-### Video Metadata: 9/9 ✅
+### Video Metadata: 9/9 [YES]
 
 | Field | Required | Implemented | Notes |
 |-------|----------|-------------|-------|
-| video_id | ✅ | ✅ | `video.id` |
-| video_url | ✅ | ✅ | Constructed |
-| upload_timestamp | ✅ | ✅ | `video.createTime` |
-| caption | ✅ | ✅ | `video.desc` |
-| hashtags | ✅ | ✅ | `video.challenges` |
-| video_duration | ✅ | ✅ | `video.video.duration` |
-| thumbnail_url | ✅ | ✅ | `video.video.cover` |
-| music_id | ✅ | ✅ | `video.music.id` |
-| sound_title | ✅ | ✅ | `video.music.title` |
+| video_id | [YES] | [YES] | `video.id` |
+| video_url | [YES] | [YES] | Constructed |
+| upload_timestamp | [YES] | [YES] | `video.createTime` |
+| caption | [YES] | [YES] | `video.desc` |
+| hashtags | [YES] | [YES] | `video.challenges` |
+| video_duration | [YES] | [YES] | `video.video.duration` |
+| thumbnail_url | [YES] | [YES] | `video.video.cover` |
+| music_id | [YES] | [YES] | `video.music.id` |
+| sound_title | [YES] | [YES] | `video.music.title` |
 
 **Bonus fields added:**
 - upload_datetime (ISO format)
@@ -421,19 +421,19 @@ Also saves individual JSON snapshots for re-parsing if needed.
 
 ---
 
-### Engagement Metrics: 7/9 ✅
+### Engagement Metrics: 7/9 [YES]
 
 | Field | Required | Implemented | Notes |
 |-------|----------|-------------|-------|
-| collection_timestamp | ✅ | ✅ | Generated |
-| hours_since_upload | ✅ | ✅ | Calculated |
-| views | ✅ | ✅ | `stats.playCount` |
-| likes | ✅ | ✅ | `stats.diggCount` |
-| comments_count | ✅ | ✅ | `stats.commentCount` |
-| shares | ✅ | ✅ | `stats.shareCount` |
-| saves | ✅ | ⚠️ | `stats.collectCount` (often null) |
-| duet_count | ✅ | ❌ | Not in API |
-| stitch_count | ✅ | ❌ | Not in API |
+| collection_timestamp | [YES] | [YES] | Generated |
+| hours_since_upload | [YES] | [YES] | Calculated |
+| views | [YES] | [YES] | `stats.playCount` |
+| likes | [YES] | [YES] | `stats.diggCount` |
+| comments_count | [YES] | [YES] | `stats.commentCount` |
+| shares | [YES] | [YES] | `stats.shareCount` |
+| saves | [YES] | [PARTIAL] | `stats.collectCount` (often null) |
+| duet_count | [YES] | [NO] | Not in API |
+| stitch_count | [YES] | [NO] | Not in API |
 
 **Bonus metrics calculated:**
 - engagement_rate
@@ -445,29 +445,29 @@ Also saves individual JSON snapshots for re-parsing if needed.
 
 ---
 
-### Creator Information: 8/8 ✅
+### Creator Information: 8/8 [YES]
 
 | Field | Required | Implemented | Notes |
 |-------|----------|-------------|-------|
-| creator_username | ✅ | ✅ | `author.uniqueId` |
-| creator_display_name | ✅ | ✅ | `author.nickname` |
-| creator_follower_count | ✅ | ✅ | `authorStats.followerCount` |
-| creator_following_count | ✅ | ✅ | `authorStats.followingCount` |
-| creator_total_likes | ✅ | ✅ | `authorStats.heartCount` |
-| creator_total_videos | ✅ | ✅ | `authorStats.videoCount` |
-| creator_verified | ✅ | ✅ | `author.verified` |
-| creator_bio | ✅ | ✅ | `author.signature` |
+| creator_username | [YES] | [YES] | `author.uniqueId` |
+| creator_display_name | [YES] | [YES] | `author.nickname` |
+| creator_follower_count | [YES] | [YES] | `authorStats.followerCount` |
+| creator_following_count | [YES] | [YES] | `authorStats.followingCount` |
+| creator_total_likes | [YES] | [YES] | `authorStats.heartCount` |
+| creator_total_videos | [YES] | [YES] | `authorStats.videoCount` |
+| creator_verified | [YES] | [YES] | `author.verified` |
+| creator_bio | [YES] | [YES] | `author.signature` |
 
 ---
 
-### Comments: 0/4 ❌
+### Comments: 0/4 [NO]
 
 | Field | Required | Implemented | Notes |
 |-------|----------|-------------|-------|
-| comment_text | ✅ | ❌ | Can add |
-| comment_username | ✅ | ❌ | Can add |
-| comment_likes | ✅ | ❌ | Can add |
-| comment_timestamp | ✅ | ❌ | Often not available |
+| comment_text | [YES] | [NO] | Can add |
+| comment_username | [YES] | [NO] | Can add |
+| comment_likes | [YES] | [NO] | Can add |
+| comment_timestamp | [YES] | [NO] | Often not available |
 
 **Not implemented because:**
 - Prioritized core time-series tracking
@@ -476,7 +476,7 @@ Also saves individual JSON snapshots for re-parsing if needed.
 
 ---
 
-### Platform-Specific: 0/11 ❌
+### Platform-Specific: 0/11 [NO]
 
 All unavailable - require TikTok Analytics API or are internal metrics.
 
@@ -514,7 +514,7 @@ data/
 
 ## Comparison: Original Goals vs. Reality
 
-### ✅ Successfully Achieved:
+### [YES] Successfully Achieved:
 
 1. **Time-series collection** - Core requirement met
 2. **32/35 data fields** - 91% coverage
@@ -527,7 +527,7 @@ data/
 
 ---
 
-### ⚠️ Adaptations Made:
+### [PARTIAL] Adaptations Made:
 
 1. **Video Freshness**
    - Goal: < 6 hours old
@@ -546,7 +546,7 @@ data/
 
 ---
 
-### ❌ Not Implemented:
+### [NO] Not Implemented:
 
 1. **Comments collection** (can be added)
 2. **TikTok Analytics metrics** (not accessible without creator login)
@@ -592,12 +592,12 @@ y = df[df['timepoint'] == 'hour_24']['views']
 
 ### Short-term (Current System):
 
-1. ✅ **Use as-is for proof of concept**
+1. [YES] **Use as-is for proof of concept**
    - Collect 2-3 cohorts (100 videos each)
    - Test ML models with available features
    - Validate that velocity metrics are predictive
 
-2. ⚠️ **Accept video age limitation**
+2. [PARTIAL] **Accept video age limitation**
    - Videos won't be "1 hour old"
    - But growth patterns still valid
    - Focus on relative metrics (velocity) not absolute timing
@@ -645,7 +645,7 @@ y = df[df['timepoint'] == 'hour_24']['views']
 
 ### Requirements Met: 85%
 
-**Core functionality:** ✅ Complete
+**Core functionality:** [YES] Complete
 - Time-series tracking works perfectly
 - All available fields collected
 - Velocity metrics calculated
@@ -672,4 +672,4 @@ y = df[df['timepoint'] == 'hour_24']['views']
 
 Built a robust time-series tracking system that collects 91% of requested fields and successfully tracks videos over 48 hours. The main adaptation was accepting that trending videos aren't freshly uploaded, but the system still provides valuable growth trajectory data for ML model development.
 
-**Status:** Production-ready with documented limitations 
+**Status:** Production-ready with documented limitations
