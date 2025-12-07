@@ -103,7 +103,7 @@ project/
 │   │
 │   └── documentation/
 │       ├── MULTI_COHORT_GUIDE.md
-│       └── IMPLEMENTATION_COMPARISON.md
+│       └── Implementation_Comparison.md
 ```
 
 ---
@@ -205,7 +205,7 @@ Laptop can be turned off between collections.
 - completion_rate, watch_time (requires TikTok Analytics - creator access only)
 - traffic_source, FYP appearances (internal TikTok metrics)
 
-See [IMPLEMENTATION_COMPARISON.md](FT/documentation/IMPLEMENTATION_COMPARISON.md) for complete field analysis.
+See [IMPLEMENTATION_COMPARISON.md](FT/documentation/Implementation_Comparison.md) for complete field analysis.
 
 ---
 
@@ -218,7 +218,7 @@ This project is built using the [TikTok-Api](https://github.com/davidteather/Tik
 ## Documentation
 
 - [Managing multiple batches simultaneously](FT/documentation/MULTI_COHORT_GUIDE.md) 
-- [Complete comparison of requirements vs. implementation](FT/documentation/IMPLEMENTATION_COMPARISON.md) 
+- [Complete comparison of requirements vs. implementation](FT/documentation/Implementation_Comparison.md) 
 ---
 
 ## License
