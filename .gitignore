@@ -1,36 +1,144 @@
-__pycache__/tiktok.cpython-37.pyc
+# ============================================================================
+# .gitignore for FT-TikTok-Api Repository
+# ============================================================================
+
+# ============================================================================
+# PYTHON
+# ============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyo
+*.pyd
+*.so
+.Python
+
+# ============================================================================
+# VIRTUAL ENVIRONMENTS
+# ============================================================================
+venv/
+.venv/
+env/
+ENV/
+.env
+pyvenv.cfg
+activate
+activate.csh
+activate.fish
+Activate.ps1
+pip
+pip3
+pip3.*
+
+# ============================================================================
+# IDE & EDITORS
+# ============================================================================
+.vscode/
+.idea/
+TikTok-Api.iml
+*.swp
+*.swo
+
+# ============================================================================
+# OPERATING SYSTEM
+# ============================================================================
+.DS_Store
+*.DS_STORE
+
+# ============================================================================
+# LOGS
+# ============================================================================
+*.log
 bmp.log
 geckodriver.log
 server.log
-TikTok-Api/bmp.log
-TikTok-Api/geckodriver.log
-TikTok-Api/server.log
-browsermob-proxy/*
-myScripts/*
-test.py
 debug.log
-res.html
-tmp/*
-dist/*
-*.egg-info
-tmp/
-tmp
-.pytest_cache/*
+
+# ============================================================================
+# BUILD & DISTRIBUTION
+# ============================================================================
+build/
+dist/
+*.egg-info/
+MANIFEST
+src/
+
+# ============================================================================
+# TESTING
+# ============================================================================
+.pytest_cache/
+tests/__pycache__/
+test.py
+test2.py
 test.mp4
 test.txt
-.pytest_cache/*
-tests/__pycache__/*
-*.pyc
 acrawl.js
-test2.py
-build
-MANIFEST
-src
-.vscode
-.env
-.venv
-/.idea/
-/TikTok-Api.iml
-venv/**
-*.DS_STORE
-FT/data
+
+# ============================================================================
+# BROWSER & SELENIUM
+# ============================================================================
+browsermob-proxy/
+geckodriver
+chromedriver
+
+# ============================================================================
+# TEMPORARY FILES
+# ============================================================================
+tmp/
+myScripts/
+res.html
+
+# ============================================================================
+# JUPYTER NOTEBOOKS
+# ============================================================================
+.ipynb_checkpoints/
+base_test.ipynb
+
+# ============================================================================
+# ML PIPELINE - Generated Files (tiktok-hooks-finetune/)
+# ============================================================================
+
+FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/.venv/
+FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/.venv/bin/
+FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/.*
+
+FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/data/
+FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/models/
+FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/artifacts/
+FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/results/
+
+# Lambda deployment artifacts
+FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/lambda_deployment/
+FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/lambda_package_light/
+FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/*.zip
+FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/layer/
+FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/response.json
+FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/test_event.json
+
+# Data files (except samples)
+FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/*.csv
+!FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/sample*.csv
+
+# EDA reports (generated)
+FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/*EDA_REPORT*.txt
+FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/*.png
+
+# ============================================================================
+# LARGE DATA FILES
+# ============================================================================
+FT/data/
+*.parquet
+*.h5
+*.hdf5
+sharegpt_conversations.parquet
+
+# Ignore entire tiktok-hooks-finetune folder (separate repo later)
+FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/
+
+# ============================================================================
+# DOCUMENTATION TO EXCLUDE
+# ============================================================================
+# (Remove these lines if you want to keep READMEs)
+# README.md
+# sharegpt_conversations.parquet
