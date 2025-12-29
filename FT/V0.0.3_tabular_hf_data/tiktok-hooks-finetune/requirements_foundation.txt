@@ -1,0 +1,21 @@
+# Requirements for Foundation Model Training
+# Fine-tuning transformer models for TikTok virality prediction
+
+# Core ML libraries
+torch>=2.0.0 
+transformers>=4.30.0
+datasets>=2.12.0
+accelerate>=0.20.0
+
+# Data processing
+pandas>=2.0.0
+numpy>=1.24.0
+scikit-learn>=1.3.0
+
+# Optional: For faster training
+# bitsandbytes>=0.39.0  # For 8-bit training (saves memory)
+# peft>=0.4.0  # For LoRA fine-tuning (more efficient)
+
+# Evaluation
+scipy>=1.11.0
+
