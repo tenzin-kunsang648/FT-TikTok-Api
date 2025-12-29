@@ -1,0 +1,42 @@
+# Lambda Deployment Requirements - TikTok Virality Prediction
+#
+# Why we need this file:
+# Lambda doesn't have ML libraries pre-installed. We must package all dependencies.
+# Using specific versions ensures reproducibility and avoids compatibility issues.
+#
+# Why specify exact versions?
+# Ensures consistency between development and production. Prevents
+# breaking changes from library updates. Critical for ML models where even
+# minor numpy version differences can change predictions.
+
+# Minimal dependencies for Lambda deployment
+# Only what's actually needed for XGBoost inference
+
+numpy==1.24.3           # Required by XGBoost and for array operations
+pandas==2.0.3           # Required for DataFrame feature engineering
+scipy==1.11.3           # Required by XGBoost and scikit-learn internally
+scikit-learn==1.3.0     # Required for StandardScaler and LabelEncoder
+xgboost==2.0.3          # Our trained models
+
+# Removed: lightgbm (not used in production)
+# Total: ~180-220 MB
+
+# Note: We trained with these versions locally
+# Lambda package must use SAME versions or predictions may differ!
+
+# Why these specific libraries?
+# - numpy: Array operations, mathematical functions
+# - pandas: DataFrame operations for feature engineering
+# - scikit-learn: Preprocessing (StandardScaler, LabelEncoder)
+# - xgboost: Regression and classification models
+# - lightgbm: Alternative model (we have it trained, might switch later)
+
+# Package size considerations:
+# - numpy: ~30 MB
+# - pandas: ~40 MB  
+# - scikit-learn: ~30 MB
+# - xgboost: ~50 MB
+# - lightgbm: ~20 MB
+# Total: ~170 MB (within 250 MB limit ✓)
+
+# For larger packages => Lambda Layers or container images

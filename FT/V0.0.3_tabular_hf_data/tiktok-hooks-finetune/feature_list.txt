@@ -1,0 +1,26 @@
+ENGINEERED FEATURES FOR MODELING
+==================================================
+
+Numeric Features:
+  - caption_length_chars
+  - caption_length_words
+  - hashtag_count
+  - hook_length_chars
+  - hook_length_words
+  - length
+  - mention_count
+  - outlier_multiplier
+  - upload_dayofweek
+  - upload_hour
+  - upload_month
+
+Categorical Features:
+  - main_category
+  - subcategory
+  - text_hook_lang
+  - caption_lang
+  - platform
+
+Target Variables:
+  - virality_score (regression)
+  - viral_tier (classification)

@@ -99,30 +99,46 @@ base_test.ipynb
 # ML PIPELINE - Generated Files (tiktok-hooks-finetune/)
 # ============================================================================
 
+# Virtual environments
 FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/.venv/
 FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/.venv/bin/
 FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/.*
 
+# Large generated data files
 FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/data/
 FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/models/
 FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/artifacts/
-FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/results/
+FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/results_EDA/
+FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/results_hyperparamtesting/
 
-# Lambda deployment artifacts
+# Lambda deployment artifacts (large zip files)
 FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/lambda_deployment/
 FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/lambda_package_light/
-FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/*.zip
 FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/layer/
+FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/*.zip
 FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/response.json
 FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/test_event.json
+FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/dependencies_layer.zip
 
-# Data files (except samples)
+# Large data files (but allow sample files)
 FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/*.csv
-!FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/sample*.csv
+!FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/dataset_docs/sample_data.csv
 
-# EDA reports (generated)
+# Generated reports and images (but allow evaluation report for handover)
 FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/*EDA_REPORT*.txt
-FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/*.png
+FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/results_EDA/*.png
+FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/results_hyperparamtesting/*.png
+FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/results_hyperparamtesting/confusion_matrices/
+FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/results_hyperparamtesting/feature_importance/
+# Allow evaluation report and model comparison CSVs for handover
+!FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/results_hyperparamtesting/EVALUATION_REPORT*.txt
+!FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/results_hyperparamtesting/model_comparison*.csv
+
+# Jupyter notebooks checkpoints
+FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/.ipynb_checkpoints/
+
+# Logs
+FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/logs/
 
 # ============================================================================
 # LARGE DATA FILES
@@ -131,14 +147,3 @@ FT/data/
 *.parquet
 *.h5
 *.hdf5
-sharegpt_conversations.parquet
-
-# Ignore entire tiktok-hooks-finetune folder (separate repo later)
-FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/
-
-# ============================================================================
-# DOCUMENTATION TO EXCLUDE
-# ============================================================================
-# (Remove these lines if you want to keep READMEs)
-# README.md
-# sharegpt_conversations.parquet

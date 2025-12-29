@@ -1,0 +1,26 @@
+[
+  {
+    "text_hook": "When the interviewer asks if you have a background in finance",
+    "caption": "I fear this would work on me as an interviewer #corporatehumor",
+    "main_category": "Business",
+    "subcategory": "HR & Payroll",
+    "length": 7.0
+  },
+  {
+    "text_hook": "Los mejores destinos de Grecia en 2025",
+    "caption": "Ya tenéis el destino según vuestro plan #grecia #islasgriegas #santorini",
+    "main_category": "Travel",
+    "subcategory": "Itinerary Planning",
+    "length": 15.0
+  },
+  {
+    "text_hook": "5 productivity hacks that actually work",
+    "caption": "These changed my life #productivity #lifehacks #motivation",
+    "main_category": "Productivity",
+    "subcategory": "Time Management",
+    "length": 30.0,
+    "upload_dayofweek": 4,
+    "upload_month": 1,
+    "is_weekend": 0
+  }
+]

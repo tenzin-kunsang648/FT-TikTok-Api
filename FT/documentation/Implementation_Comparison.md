@@ -25,7 +25,7 @@
 
 ### Implementation Status: [YES] FULLY IMPLEMENTED
 
-**What we built:**
+**What I built:**
 - [YES] Cohort system tracks specific video IDs
 - [YES] Re-fetches SAME videos at each timepoint
 - [YES] Saves snapshots: hour_0, hour_1, hour_6, hour_24, hour_48
