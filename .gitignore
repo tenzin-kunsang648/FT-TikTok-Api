@@ -144,6 +144,9 @@ FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/logs/
 FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/models_foundation/*/pytorch_model.bin
 FT/V0.0.3_tabular_hf_data/tiktok-hooks-finetune/models_foundation/*/model.safetensors
 
+# apify config file with secret token
+FT/data_collect_config.py
+
 # ============================================================================
 # LARGE DATA FILES
 # ============================================================================

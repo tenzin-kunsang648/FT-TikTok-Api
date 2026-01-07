@@ -152,6 +152,47 @@ class CohortManager:
 
 
 # =============================================================================
+# GLOBAL VIDEO REGISTRY
+# =============================================================================
+
+class VideoRegistry:
+    """Track all videos across all cohorts to prevent duplicates"""
+    
+    def __init__(self):
+        self.registry_file = Path('data') / 'global_video_registry.json'
+        self.registry_file.parent.mkdir(exist_ok=True)
+        self._load()
+    
+    def _load(self):
+        if self.registry_file.exists():
+            with open(self.registry_file, 'r') as f:
+                self.data = json.load(f)
+        else:
+            self.data = {'tracked_videos': {}}
+    
+    def _save(self):
+        with open(self.registry_file, 'w') as f:
+            json.dump(self.data, f, indent=2)
+    
+    def add_videos(self, video_ids, cohort_id):
+        """Register videos for a cohort"""
+        for vid in video_ids:
+            self.data['tracked_videos'][str(vid)] = {
+                'cohort_id': cohort_id,
+                'added_at': datetime.now().isoformat()
+            }
+        self._save()
+    
+    def is_tracked(self, video_id):
+        """Check if video is already being tracked"""
+        return str(video_id) in self.data['tracked_videos']
+    
+    def filter_new(self, video_ids):
+        """Return only videos not already tracked"""
+        return [v for v in video_ids if not self.is_tracked(v)]
+
+
+# =============================================================================
 # DATA EXTRACTION
 # =============================================================================
 
@@ -244,6 +285,8 @@ async def init_cohort(count=100):
         print("=" * 70)
         print(f"\nTarget: {count} videos (selecting newest from trending)\n")
         
+        registry = VideoRegistry()
+        
         api = TikTokApi()
         print("⏳ Creating session...")
         await api.create_sessions(num_sessions=1, headless=False, browser="webkit")
@@ -271,6 +314,25 @@ async def init_cohort(count=100):
         if not videos:
             print("✗ No videos collected")
             return
+        
+        # Filter out already tracked videos
+        print(f"🔍 Filtering duplicates...")
+        video_ids_all = [str(v.get('id')) for v in videos if v.get('id')]
+        new_video_ids = registry.filter_new(video_ids_all)
+        
+        print(f"  Total collected: {len(video_ids_all)}")
+        print(f"  Already tracked: {len(video_ids_all) - len(new_video_ids)}")
+        print(f"  Available new: {len(new_video_ids)}\n")
+        
+        # Filter to only new videos
+        videos = [v for v in videos if str(v.get('id')) in new_video_ids]
+        
+        if len(videos) < count:
+            print(f"⚠️  Only {len(videos)} new videos available")
+            if len(videos) == 0:
+                print("✗ No new videos to track\n")
+                return
+            count = len(videos)
         
         # Sort by upload time
         print(f"📅 Sorting by upload time...")
@@ -300,6 +362,9 @@ async def init_cohort(count=100):
         cohort_id = manager.create(video_ids)
         manager = CohortManager(cohort_id)
         manager.save_snapshot(hour_0_data, 'hour_0')
+        
+        # Register videos in global registry
+        registry.add_videos(video_ids, cohort_id)
         
         print("=" * 70)
         print(f"✓ COHORT: {cohort_id}")
@@ -618,6 +683,29 @@ def show_status(cohort_id=None):
     print("=" * 70 + "\n")
 
 
+def show_registry():
+    """Show global video registry stats"""
+    registry = VideoRegistry()
+    
+    print(f"\n" + "=" * 70)
+    print(f"GLOBAL VIDEO REGISTRY")
+    print("=" * 70)
+    print(f"\n📊 Total videos tracked: {len(registry.data['tracked_videos'])}\n")
+    
+    by_cohort = {}
+    for vid, info in registry.data['tracked_videos'].items():
+        cid = info['cohort_id']
+        if cid not in by_cohort:
+            by_cohort[cid] = 0
+        by_cohort[cid] += 1
+    
+    print("Videos per cohort:")
+    for cid, count in sorted(by_cohort.items()):
+        print(f"  {cid}: {count} videos")
+    
+    print("\n" + "=" * 70 + "\n")
+
+
 # =============================================================================
 # MAIN
 # =============================================================================
@@ -629,7 +717,8 @@ async def main():
         print("  collect [cohort_id]  Collect next")
         print("  export [cohort_id]   Export CSV")
         print("  status [cohort_id]   Show status")
-        print("  list                 List all\n")
+        print("  list                 List all")
+        print("  registry             Show registry\n")
         return
     
     cmd = sys.argv[1].lower()
@@ -646,6 +735,8 @@ async def main():
         show_status(sys.argv[2] if len(sys.argv) > 2 else None)
     elif cmd == 'list':
         list_cohorts()
+    elif cmd == 'registry':
+        show_registry()
     else:
         print(f"\n✗ Unknown: {cmd}\n")
 
